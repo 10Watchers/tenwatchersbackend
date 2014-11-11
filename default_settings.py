@@ -20,6 +20,8 @@ URL_PREFIX_VERSION = '/api'
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db'
 
+DROP_BEFORE_CREATE = True
+
 try:
     from local_settings import *
 except ImportError:

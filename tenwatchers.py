@@ -1,8 +1,10 @@
+#!/usr/bin/env python
+from __future__ import absolute_import
 from flask import Flask
-from tenwatchers_api import apps_api
-from util import configure_logging
+from tenwatchers.api.tenwatchers_api import tenwatchers_api
+from tenwatchers.util import configure_logging
 from default_settings import URL_PREFIX_VERSION
-from database import db
+from tenwatchers.database import db
 
 
 def create_app(config_module=None):
@@ -18,13 +20,13 @@ def create_app(config_module=None):
     app.logger.info("Setting up the API end points")
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
 
-    app.register_blueprint(apps_api, url_prefix=URL_PREFIX_VERSION)
+    app.register_blueprint(tenwatchers_api, url_prefix=URL_PREFIX_VERSION)
     db.init_app(app)
     with app.app_context():
         # Extensions like Flask-SQLAlchemy now know what the "current" app
         # is while within this block. Therefore, you can now run........
+        db.drop_all()
         db.create_all()
-
     return app
 
 
