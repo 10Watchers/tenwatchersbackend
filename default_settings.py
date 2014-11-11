@@ -26,3 +26,5 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+DROP_TABLES=True

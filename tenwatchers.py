@@ -18,14 +18,19 @@ def create_app(config_module=None):
     configure_logging(app)
     app.logger.info("Flask Application Started")
     app.logger.info("Setting up the API end points")
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
+    app.config['SQLALCHEMY_DATABASE_URI'] =  'postgresql+psycopg2://tenwatcher:10watcher@tenwatcher.cqj6mu1ippgc.us-west-2.rds.amazonaws.com:5432/tenwatch'
+                    # 'postgresql+psycopg2://10watcher:ten10watchpassword!@10.36.0.143:5432/10watch'
 
     app.register_blueprint(tenwatchers_api, url_prefix=URL_PREFIX_VERSION)
     db.init_app(app)
     with app.app_context():
         # Extensions like Flask-SQLAlchemy now know what the "current" app
         # is while within this block. Therefore, you can now run........
-        db.drop_all()
+
+        if app.config.get("DROP_TABLES", False):
+            app.logger.info("Dropping and recreating the database tables")
+            db.drop_all()
+
         db.create_all()
     return app
 
