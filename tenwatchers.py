@@ -4,7 +4,7 @@ from flask import Flask
 from tenwatchers.api.tenwatchers_api import tenwatchers_api
 from tenwatchers.util import configure_logging
 from default_settings import URL_PREFIX_VERSION
-from tenwatchers.database import db
+from tenwatchers.db import db
 
 
 def create_app(config_module=None):

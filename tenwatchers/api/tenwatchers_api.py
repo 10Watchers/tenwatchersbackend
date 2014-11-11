@@ -2,8 +2,8 @@
 from flask import Blueprint, request, abort, jsonify
 from flask.ext.restful import Api, Resource
 from tenwatchers.utils import json_response
-from tenwatchers.database import db
-from tenwatchers.model.users import UserModel
+from tenwatchers.db import db
+from tenwatchers.db.models import UserModel
 
 
 tenwatchers_api = Blueprint('tenwatchers_api', __name__)

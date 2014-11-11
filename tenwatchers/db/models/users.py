@@ -2,7 +2,7 @@
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
-from tenwatchers.database import db
+from tenwatchers.db import db
 from flask import current_app
 from tenwatchers.util import generate_uuid
 
