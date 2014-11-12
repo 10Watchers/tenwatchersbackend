@@ -3,7 +3,7 @@ from flask import Blueprint, request, abort, jsonify
 from flask.ext.restful import Api, Resource
 from tenwatchers.utils import json_response
 from tenwatchers.db import db
-from tenwatchers.db.models import UserModel
+from tenwatchers.db.models import UserModel, Group
 
 
 tenwatchers_api = Blueprint('tenwatchers_api', __name__)
@@ -55,5 +55,35 @@ class User(Resource):
         })
 
 
+class Groups(Resource):
+    method_decorators = [json_response]
+
+    def get(self):
+        return [{ "id" : g.id, "name" : g.name } for g in Group.query.all()]
+
+    def post(self):
+        created = False
+        name = request.json.get('name')
+        id = request.json.get('id', None)
+        if id:
+            try:
+                group = Group.query.get(id)
+            except: #TODO: only catch Does Not Exist exceptions
+                abort(406) # No group with that id
+        else:
+            group = Group.query.filter_by(name=name).first()
+        if not group:
+            group = Group(id = id)
+            created = True
+        group.name = name
+        db.session.add(group)
+        db.session.commit()
+        return jsonify({
+            "group_id" : group.id,
+            "group" : group.name,
+            "created" : created
+        })
+
 api.add_resource(Echo, '/echo')
 api.add_resource(User, '/user')
+api.add_resource(Groups, '/group')

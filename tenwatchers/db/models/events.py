@@ -11,7 +11,7 @@ class Event(db.Model):
 
     id = Column(Integer, primary_key=True)
 
-    user_id = Column(Integer, ForiegnKey('user.id'), nullable=True)
+    user_id = Column(db.VARCHAR(255), ForeignKey('user.id'), nullable=True)
 
     lat = Column(Float, nullable=False)
     lon = Column(Float, nullable=False)

@@ -1,2 +1,2 @@
-from messages import Message
-from users import UserModel
+from events import Event
+from users import UserModel, Group

@@ -9,6 +9,7 @@ from tenwatchers.util import generate_uuid
 from datetime import datetime
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import ForeignKey
+from .events import Event
 
 class UserModel(db.Model):
     __tablename__ = 'user'
