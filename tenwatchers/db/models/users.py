@@ -63,7 +63,7 @@ class UserModel(db.Model):
 
 class UserGroup(db.Model):
     user_id = db.Column(db.VARCHAR(255), ForeignKey('user.id'), primary_key=True)
-    group_id = db.Column(db.Integer, ForeignKey('group.id', primary_key=True))
+    group_id = db.Column(db.Integer, ForeignKey('group.id'), primary_key=True)
     user = relationship("UserModel", backref="user_groups")
 
 class Group(db.Model):

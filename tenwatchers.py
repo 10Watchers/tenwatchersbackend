@@ -18,8 +18,6 @@ def create_app(config_module=None):
     configure_logging(app)
     app.logger.info("Flask Application Started")
     app.logger.info("Setting up the API end points")
-    app.config['SQLALCHEMY_DATABASE_URI'] =  'postgresql+psycopg2://tenwatcher:10watcher@tenwatcher.cqj6mu1ippgc.us-west-2.rds.amazonaws.com:5432/tenwatch'
-                    # 'postgresql+psycopg2://10watcher:ten10watchpassword!@10.36.0.143:5432/10watch'
 
     app.register_blueprint(tenwatchers_api, url_prefix=URL_PREFIX_VERSION)
     db.init_app(app)
@@ -41,4 +39,8 @@ HOST = app.config['HOST']
 PORT = app.config['PORT']
 
 if __name__ == "__main__":
+
+
+
+
     app.run(host=HOST, port=PORT)
