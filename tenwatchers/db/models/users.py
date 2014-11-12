@@ -7,7 +7,8 @@ from flask import current_app
 from tenwatchers.util import generate_uuid
 
 from datetime import datetime
-
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy import ForeignKey
 
 class UserModel(db.Model):
     __tablename__ = 'user'
@@ -15,6 +16,8 @@ class UserModel(db.Model):
     timestamp = db.Column(db.DateTime, index=True)
     phone = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+
+    events = relationship("Event", backref="user")
 
     def __init__(
             self,
@@ -56,3 +59,17 @@ class UserModel(db.Model):
             return None    # invalid token
         user = UserModel.query.get(data['id'])
         return user
+
+
+class UserGroup(db.Model):
+    user_id = db.Column(db.VARCHAR(255), ForeignKey('user.id'), primary_key=True)
+    group_id = db.Column(db.Integer, ForeignKey('group.id', primary_key=True))
+    user = relationship("UserModel", backref="user_groups")
+
+class Group(db.Model):
+    __tablename__ = "group"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+
+    users = relationship("UserGroup", backref="groups")

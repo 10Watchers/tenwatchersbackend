@@ -1,5 +1,4 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Text
 from geoalchemy2 import Geometry
 
 import geoalchemy2
@@ -7,17 +6,18 @@ from geoalchemy2.types import Geography
 
 from tenwatchers.db import db
 
-Base = declarative_base()
-
-class Message(db.Model):
-    __tablename__ = 'messages'
+class Event(db.Model):
+    __tablename__ = 'events'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, nullable=True)
+
+    user_id = Column(Integer, ForiegnKey('user.id'), nullable=True)
+
     lat = Column(Float, nullable=False)
     lon = Column(Float, nullable=False)
     location = Column(Geography('POINT'))
     time = Column(DateTime, nullable=False)
+    description = Column(Text)
     alert_level = Column(Integer, nullable=True)
 
     def update_location(self):
