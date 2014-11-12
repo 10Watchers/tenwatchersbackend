@@ -3,7 +3,7 @@ from flask import Blueprint, request, abort, jsonify
 from flask.ext.restful import Api, Resource
 from tenwatchers.utils import json_response
 from tenwatchers.db import db
-from tenwatchers.db.models import UserModel, Group, HeartbeatModel
+from tenwatchers.db.models import UserModel, UserGroup, Group, HeartbeatModel
 
 
 tenwatchers_api = Blueprint('tenwatchers_api', __name__)
@@ -27,7 +27,7 @@ class User(Resource):
         return [u.to_json() for u in UserModel.query.all()]
 
     def post(self):
-        password = request.json.get('password')
+        password = request.json.get('password', "Foo")
         phone = request.json.get('phone')
         if password is None or phone is None:
             abort(400)    # missing arguments
@@ -43,6 +43,37 @@ class User(Resource):
         return {
             "client_id": user.id
         }
+
+class UserGroups(Resource):
+    method_decorators = [json_response]
+
+    def get(self, user_id):
+        try:
+            user = User.query.get(user_id)
+        except: #TODO Does not exist
+            abort(406)# bad request
+
+        return [g.name for g in user.groups.all()]
+
+    def post(self, user_id):
+        try:
+            user = User.query.get(user_id)
+        except: #TODO Does not exist
+            abort(406)# bad request
+
+        groups = request.json.get("groups", [])
+        for g in groups:
+            new_group = Group.query.filter(name=g).first()
+            if not new_group:
+                new_group = Group(name=g)
+                session.db.add(new_group)
+                session.save()
+            user.groups.add(group)
+
+        return {
+            "success" : True
+        }
+
 
 
 class Heartbeat(Resource):
@@ -105,5 +136,6 @@ class Groups(Resource):
 
 api.add_resource(Echo, '/echo')
 api.add_resource(User, '/user')
+api.add_resource(UserGroups, '/user/groups/<string:user_id>')
 api.add_resource(Groups, '/group')
 api.add_resource(Heartbeat, '/heartbeat')
