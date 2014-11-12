@@ -16,9 +16,13 @@ class UserModel(db.Model):
     id = db.Column(db.VARCHAR(255), primary_key=True)
     timestamp = db.Column(db.DateTime, index=True)
     phone = db.Column(db.String(120), index=True, unique=True)
-    password_hash = db.Column(db.String(128))
+    # password_hash = db.Column(db.String(128))
+    message_theshold = db.Column(db.Integer)
+    heartbeat_preference = db.Column(db.String(120))
 
     events = relationship("Event", backref="user")
+
+
 
     def __init__(
             self,
@@ -67,6 +71,11 @@ class UserGroup(db.Model):
     group_id = db.Column(db.Integer, ForeignKey('group.id'), primary_key=True)
     user = relationship("UserModel", backref="user_groups")
 
+class GroupEvent(db.Model):
+    event_id = db.Column(db.Integer, ForeignKey('events.id'), primary_key=True)
+    group_id = db.Column(db.Integer, ForeignKey('group.id'), primary_key=True)
+    group = relationship("Event", backref="event_groups")
+
 class Group(db.Model):
     __tablename__ = "group"
 
@@ -74,3 +83,4 @@ class Group(db.Model):
     name = db.Column(db.String)
 
     users = relationship("UserGroup", backref="groups")
+    events = relationship("GroupEvent", backref="groups")
