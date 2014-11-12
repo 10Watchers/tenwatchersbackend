@@ -13,9 +13,9 @@ class Event(db.Model):
 
     user_id = Column(db.VARCHAR(255), ForeignKey('user.id'), nullable=True)
 
-    lat = Column(Float, nullable=False)
-    lon = Column(Float, nullable=False)
-    location = Column(Geography('POINT'))
+    lat = Column(Float, nullable=True)
+    lon = Column(Float, nullable=True)
+    location = Column(Geography('POINT'), nullable=True)
     time = Column(DateTime, nullable=False)
     description = Column(Text)
     alert_level = Column(Integer, nullable=True)
@@ -47,6 +47,13 @@ class Event(db.Model):
         location = "ST_GeographyFromText(E'SRID=4326;%s')" % point
 
         return 'ST_DWithin(%s, %s, %d)' % (attr, location, distance)
+
+    @classmethod
+    def intersects_clause(cls, json_polygon):
+        """Return an intersects clause that accepts a geojson polygon as input
+        """
+        attr = '%s.location' % cls.__tablename__
+        return "ST_Within({0})".format(json_polygon)
 
     def __repr__(self):
         return "%i Message from: %f, %f" % (self.active, self.lat, self.lon)

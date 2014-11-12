@@ -67,6 +67,11 @@ class UserGroup(db.Model):
     group_id = db.Column(db.Integer, ForeignKey('group.id'), primary_key=True)
     user = relationship("UserModel", backref="user_groups")
 
+class GroupEvent(db.Model):
+    event_id = db.Column(db.Integer, ForeignKey('events.id'), primary_key=True)
+    group_id = db.Column(db.Integer, ForeignKey('group.id'), primary_key=True)
+    group = relationship("Event", backref="event_groups")
+
 class Group(db.Model):
     __tablename__ = "group"
 
@@ -74,3 +79,4 @@ class Group(db.Model):
     name = db.Column(db.String)
 
     users = relationship("UserGroup", backref="groups")
+    events = relationship("GroupEvent", backref="groups")
