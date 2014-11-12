@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from flask import Flask
 from tenwatchers.api.tenwatchers_user_api import tenwatchers_user_api
 from tenwatchers.api.tenwatchers_heartbeat_api import tenwatchers_heartbeat_api
+from tenwatchers.api.tenwatchers_groups_api import tenwatchers_groups_api
 from tenwatchers.util import configure_logging
 from default_settings import URL_PREFIX_VERSION
 from tenwatchers.db import db
@@ -22,6 +23,7 @@ def create_app(config_module=None):
 
     app.register_blueprint(tenwatchers_user_api, url_prefix=URL_PREFIX_VERSION)
     app.register_blueprint(tenwatchers_heartbeat_api, url_prefix=URL_PREFIX_VERSION)
+    app.register_blueprint(tenwatchers_groups_api, url_prefix=URL_PREFIX_VERSION)
     db.init_app(app)
     with app.app_context():
         # Extensions like Flask-SQLAlchemy now know what the "current" app

@@ -10,36 +10,36 @@ tenwatchers_groups_api = Blueprint('tenwatchers_groups_api', __name__)
 api = Api(tenwatchers_groups_api)
 
 
-class UserGroups(Resource):
-    method_decorators = [json_response]
-
-    def get(self, user_id):
-        try:
-            user = UserModel.query.get(user_id)
-        except: #TODO Does not exist
-            abort(406)# bad request
-
-        return [g.name for g in user.groups.all()]
-
-    def post(self, user_id):
-        try:
-            user = UserModel.query.get(user_id)
-        except: #TODO Does not exist
-            abort(406)# bad request
-
-        groups = request.json.get("groups", [])
-        for g in groups:
-            new_group = UserGroup.query.filter(name=g).first()
-            if not new_group:
-                new_group = UserGroup(name=g)
-                db.session.add(new_group)
-                db.session.save()
-            user.groups.add(new_group)
-
-        return {
-            "success" : True
-        }
-
+# class UserGroups(Resource):
+#     method_decorators = [json_response]
+#
+#     def get(self, user_id):
+#         try:
+#             user = UserModel.query.get(user_id)
+#         except: #TODO Does not exist
+#             abort(406)# bad request
+#
+#         return [g.name for g in user.groups.all()]
+#
+#     def post(self, user_id):
+#         try:
+#             user = UserModel.query.get(user_id)
+#         except: #TODO Does not exist
+#             abort(406)# bad request
+#
+#         groups = request.json.get("groups", [])
+#         for g in groups:
+#             new_group = UserGroup.query.filter(name=g).first()
+#             if not new_group:
+#                 new_group = UserGroup(name=g)
+#                 db.session.add(new_group)
+#                 db.session.save()
+#             user.groups.add(new_group)
+#
+#         return {
+#             "success" : True
+#         }
+#
 
 class Groups(Resource):
     method_decorators = [json_response]
@@ -70,5 +70,4 @@ class Groups(Resource):
             "created" : created
         })
 
-api.add_resource(UserGroups, '/groups/<string:user_id>')
 api.add_resource(Groups, '/group')

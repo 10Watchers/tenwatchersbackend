@@ -17,12 +17,11 @@ class UserModel(db.Model):
     timestamp = db.Column(db.DateTime, index=True)
     phone = db.Column(db.String(120), index=True, unique=True)
     # password_hash = db.Column(db.String(128))
-    message_theshold = db.Column(db.Integer)
+    message_threshold = db.Column(db.Integer)
     heartbeat_preference = db.Column(db.String(120))
+    heartbeat_message = db.Column(db.Text)
 
     events = relationship("Event", backref="user")
-
-
 
     def __init__(
             self,
