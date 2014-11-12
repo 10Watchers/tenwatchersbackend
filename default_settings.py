@@ -18,7 +18,9 @@ ERROR_TO_EMAIL = False
 URL_PREFIX_VERSION = '/api'
 
 
-SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db'
+SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://tenwatcher:10watcher@tenwatcher.cqj6mu1ippgc.us-west-2.rds.amazonaws.com:5432/tenwatch'
+
+DROP_TABLES=False
 
 try:
     from local_settings import *
