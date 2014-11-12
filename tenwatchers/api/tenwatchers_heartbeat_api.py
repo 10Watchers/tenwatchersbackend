@@ -4,6 +4,7 @@ from flask.ext.restful import Api, Resource
 from tenwatchers.utils import json_response
 from tenwatchers.db import db
 from tenwatchers.db.models import HeartbeatModel, UserModel
+from tenwatchers.util import send_sms
 
 
 tenwatchers_heartbeat_api = Blueprint('tenwatchers_heartbeat_api', __name__)
@@ -46,6 +47,7 @@ class Heartbeat(Resource):
         print heartbeat.to_json()
         heartbeat.update_status(False)
         db.session.commit()
+        send_sms(str(heartbeat.receiver), str(heartbeat.message))
         return {
             "status": status,
             'user': user.id

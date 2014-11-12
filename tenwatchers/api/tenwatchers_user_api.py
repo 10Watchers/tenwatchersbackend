@@ -24,6 +24,7 @@ class Echo(Resource):
         phone = request.json.get('phone')
         return send_sms(phone, 'hello world')
 
+
 class User(Resource):
     method_decorators = [json_response]
 
@@ -45,7 +46,7 @@ class User(Resource):
         db.session.add(user)
         db.session.commit()
         return {
-            "client_id": user.id
+            "user_id": user.id
         }
 
 class UserDetail(Resource):
