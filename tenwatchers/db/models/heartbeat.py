@@ -2,7 +2,7 @@
 from tenwatchers.db import db
 from tenwatchers.util import generate_uuid
 from datetime import datetime
-from sqlalchemy import Column, Integer, DateTime, VARCHAR, Boolean, Float
+from sqlalchemy import Column, DateTime, VARCHAR, Boolean, Float, String
 
 # import geoalchemy2
 from geoalchemy2.types import Geography
@@ -22,7 +22,8 @@ class HeartbeatModel(db.Model):
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     status = Column(Boolean)
-    action = Column(Integer)
+    receiver = Column(String(120))
+    message = Column(VARCHAR(255))
 
     def __init__(
             self,
@@ -31,28 +32,38 @@ class HeartbeatModel(db.Model):
             longitude,
             updated_time=None,
             expire_time=None,
-            status=None,
-            action=None
+            status=True,
+            receiver=None,
+            message=None
     ):
         self.id = generate_uuid()
         self.user = user
         self.latitude = latitude
         self.longitude = longitude
         self.location = "POINT(%0.8f %0.8f)" % (self.longitude, self.latitude)
+        self.status = status
         self.created_time = datetime.utcnow()
         self.updated_time = updated_time
         self.expire_time = datetime.utcnow()
+        self.receiver = receiver
+        self.message = message
 
     def __repr__(self):
         return "Heartbeat from: {0}".format(self.user)
 
+    def update_status(self, status):
+        self.status = False
+        return self
+
     def to_json(self):
         json_heartbeat = {
             'id': self.id,
-            'action': self.action,
+            'receiver': self.receiver,
+            'action': 'Send: {0} to {1}'.format(self.message, self.receiver),
             'location': str(self.location),
             'created_time': str(self.created_time),
             'expire_time': str(self.expire_time),
-            'user': self.user
+            'user': self.user,
+            'status': self.status
         }
         return json_heartbeat
