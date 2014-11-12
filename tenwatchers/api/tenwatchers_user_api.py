@@ -2,6 +2,7 @@
 from flask import Blueprint, request, abort, jsonify
 from flask.ext.restful import Api, Resource
 from tenwatchers.utils import json_response
+from tenwatchers.util import send_sms
 from tenwatchers.db import db
 from tenwatchers.db.models import UserModel
 
@@ -18,6 +19,10 @@ class Echo(Resource):
             {
                 "App Status": "App is up and running",
             })
+
+    def post(self):
+        phone = request.json.get('phone')
+        return send_sms(phone, 'hello world')
 
 
 class User(Resource):
@@ -46,3 +51,4 @@ class User(Resource):
 
 
 api.add_resource(User, '/user')
+api.add_resource(Echo, '/echo')

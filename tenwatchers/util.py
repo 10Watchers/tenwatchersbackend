@@ -3,6 +3,34 @@ from logging import Formatter
 from logging.handlers import TimedRotatingFileHandler
 import uuid
 import os
+from flask import current_app
+
+from twilio.rest import TwilioRestClient
+
+
+account_sid = 'ACcdea1ecd57653e325bdb0d6a68128ea8'
+auth_token = '22be35f15b29770ae254c54bbe11c1c3'
+client = TwilioRestClient(account_sid, auth_token)
+
+WHITELIST = [
+    '+358504361615',
+    '+16024323789'
+]
+
+
+def get_twilio_phone():
+    return '+14428881219'
+
+
+def send_sms(to_user, message):
+    if to_user in WHITELIST:
+        current_app.logger.info(
+            "Sending SMS with PIN {0} to User {1}".format(message, to_user))
+        message = client.messages.create(
+            to=to_user,
+            from_=get_twilio_phone(),
+            body='{0}'.format(message)
+        )
 
 
 def generate_uuid():
