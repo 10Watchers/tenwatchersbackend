@@ -1,0 +1,6 @@
+{
+  "aws_access_key": "YOUR_KEY",
+  "aws_secret_key": "YOUR_SECRET",
+  "source_ami": "ami-3d50120d",
+  "region": "us-west-1"
+}

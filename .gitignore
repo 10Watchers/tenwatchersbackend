@@ -69,3 +69,11 @@ doc/_build/
 
 # Media test created files
 media_test/uploads/
+
+# pycharm
+*.idea
+
+# packer build
+packer/variables.json
+packer/ec2_amazon-ebs.pem
+packer/output.log
