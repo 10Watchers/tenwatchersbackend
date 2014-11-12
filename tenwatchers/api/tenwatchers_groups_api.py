@@ -32,8 +32,8 @@ class UserGroups(Resource):
             new_group = UserGroup.query.filter(name=g).first()
             if not new_group:
                 new_group = UserGroup(name=g)
-                session.db.add(new_group)
-                session.save()
+                db.session.add(new_group)
+                db.session.save()
             user.groups.add(new_group)
 
         return {
@@ -70,5 +70,5 @@ class Groups(Resource):
             "created" : created
         })
 
-api.add_resource(UserGroups, '/user/groups/<string:user_id>')
+api.add_resource(UserGroups, '/groups/<string:user_id>')
 api.add_resource(Groups, '/group')
